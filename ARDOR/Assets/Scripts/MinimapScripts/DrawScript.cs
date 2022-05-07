@@ -17,16 +17,7 @@ public class DrawScript : MonoBehaviour
     private double EARTH_CIRCUMFERENCE = 40075016.685578d;
     private List<Vector2d> coordList = new List<Vector2d>();
     public bool MinimapLocked { get => minimapLocked; set => minimapLocked = value; }
-    private void Awake()
-    {
-            //banner.text = "boom";
 
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void CalcPin(Vector3 p)
     {
         string str = "";
@@ -47,26 +38,6 @@ public class DrawScript : MonoBehaviour
         var latlongDelta = DiffMetersToLatLon(diffGeoMeters, lat);
         var newLatLong = map.CenterLatitudeLongitude + latlongDelta;
         coordList.Add(newLatLong);
-
-        //str += ("touch.position: " + p + "\n");
-        //str += ("mousePosCam: " + mousePosCam + "\n");
-        //str += ("mousePosWorld: " + mousePosWorld + "\n");
-        //str += ("map center: " + map.CenterLatitudeLongitude + "\n");
-        //str += ("mouse diff: " + diffUnityMeters + "\n");
-        //str += ("abs zoom: " + map.AbsoluteZoom + "\n");
-        //str += ("zoom: " + map.Zoom + "\n");
-        //str += ("lat: " + lat + "\n");
-        //str += ("geoMetersPerTile: " + geoMetersPerTile + "\n");
-        //str += ("zoomDecimal: " + zoomDecimal + "\n");
-        //str += ("tileSizeInPixel: " + tileSizeInPixel + "\n");
-        //str += ("tileCountPerTexture: " + tileCountPerTexture + "\n");
-        //str += ("geoMetersPerTexture: " + geoMetersPerTexture + "\n");
-        //str += ("diffGeoMeters: " + diffGeoMeters + "\n");
-        //str += ("geoMetersPerUnityMeter: " + geoMetersPerUnityMeter + "\n");
-        //str += ("latlongDeltaEXPERIMENTAL: " + latlongDeltaEXPERIMENTAL + "\n");
-        //str += ("Hit: " + newLatLongEXPERIMENTAL + "\n");
-
-        //banner.text = str;
     }
 
     private Vector2d DiffMetersToLatLon(Vector2d diffGeoMeters, double lat)

@@ -32,8 +32,11 @@
 		private bool _isInitialized = false;
 		private Plane _groundPlane = new Plane(Vector3.up, 0);
 		private bool _dragStartedOnUI = false;
+		private bool minimapLocked = false; // when true user can draw on map
 
-		void Awake()
+        public bool MinimapLocked { get => minimapLocked; set => minimapLocked = value; }
+
+        void Awake()
 		{
 			if (null == _referenceCamera)
 			{
@@ -62,18 +65,15 @@
 
 		private void LateUpdate()
 		{
-			if (!_isInitialized) { return; }
+			if (!_isInitialized || MinimapLocked) { return; }
 
-			if (!_dragStartedOnUI)
+			if (Input.touchSupported && Input.touchCount > 0)
 			{
-				if (Input.touchSupported && Input.touchCount > 0)
-				{
-					HandleTouch();
-				}
-				else
-				{
-					HandleMouseAndKeyBoard();
-				}
+				HandleTouch();
+			}
+			else
+			{
+				HandleMouseAndKeyBoard();
 			}
 		}
 
@@ -82,6 +82,7 @@
 			// zoom
 			float scrollDelta = 0.0f;
 			scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+			//Debug.Log("zoom: " + scrollDelta);
 			ZoomMapUsingTouchOrMouse(scrollDelta);
 
 
@@ -136,6 +137,7 @@
 			var zoom = Mathf.Max(0.0f, Mathf.Min(_mapManager.Zoom + zoomFactor * _zoomSpeed, 21.0f));
 			if (Math.Abs(zoom - _mapManager.Zoom) > 0.0f)
 			{
+				//Debug.Log("zoom is:" + zoom);
 				_mapManager.UpdateMap(_mapManager.CenterLatitudeLongitude, zoom);
 			}
 		}
@@ -158,6 +160,7 @@
 
 		void PanMapUsingTouchOrMouse()
 		{
+
 			if (_useDegreeMethod)
 			{
 				UseDegreeConversion();
@@ -182,7 +185,7 @@
 				Debug.Log("Latitude: " + latlongDelta.x + " Longitude: " + latlongDelta.y);
 			}
 
-			if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+			if (Input.GetMouseButton(0)/* && !EventSystem.current.IsPointerOverGameObject()*/)
 			{
 				var mousePosScreen = Input.mousePosition;
 				//assign distance of camera to ground plane to z, otherwise ScreenToWorldPoint() will always return the position of the camera
@@ -203,7 +206,9 @@
 
 			if (_shouldDrag == true)
 			{
+
 				var changeFromPreviousPosition = _mousePositionPrevious - _mousePosition;
+
 				if (Mathf.Abs(changeFromPreviousPosition.x) > 0.0f || Mathf.Abs(changeFromPreviousPosition.y) > 0.0f)
 				{
 					_mousePositionPrevious = _mousePosition;
@@ -213,6 +218,7 @@
 					{
 						if (null != _mapManager)
 						{
+							Debug.Log("UnityTileSize: " + _mapManager.UnityTileSize);
 							float factor = _panSpeed * Conversions.GetTileScaleInMeters((float)0, _mapManager.AbsoluteZoom) / _mapManager.UnityTileSize;
 							var latlongDelta = Conversions.MetersToLatLon(new Vector2d(offset.x * factor, offset.z * factor));
 							var newLatLong = _mapManager.CenterLatitudeLongitude + latlongDelta;
@@ -222,16 +228,17 @@
 					}
 					_origin = _mousePosition;
 				}
-				else
-				{
-					if (EventSystem.current.IsPointerOverGameObject())
-					{
-						return;
-					}
-					_mousePositionPrevious = _mousePosition;
-					_origin = _mousePosition;
-				}
-			}
+                else// in case this is the first frame the mouse is pressed down
+                {
+                    //if (EventSystem.current.IsPointerOverGameObject())
+                    //{
+
+                    //	return;
+                    //}
+                    _mousePositionPrevious = _mousePosition;
+                    _origin = _mousePosition;
+                }
+            }
 		}
 
 		void UseDegreeConversion()

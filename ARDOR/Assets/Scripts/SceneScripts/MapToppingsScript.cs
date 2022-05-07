@@ -109,21 +109,24 @@ public class MapToppingsScript : MonoBehaviour
 
         float minDistFromCenter = 999999999;
         Vector2 center = new Vector2((float)mapcenterLat, (float)mapcenterLon);
+        // get rid of the header line
+        reader.ReadLine();
+
         while ((line = reader.ReadLine()) != null)
         {
             poiFileLines.Add(line);
             GameObject go = Instantiate(poiPrefab, Vector3.zero, Quaternion.identity, transform);
 
             // get all elments in line
-            string[] elements = line.Split(' ');
+            string[] elements = line.Split(',');
             // set the name of the poi
             PoiScript poiScript = go.GetComponent<PoiScript>();
-            poiScript.poiName = elements[0];
-            poiScript.centerAlt = float.Parse(elements[elements.Length - 1]);
+            poiScript.poiName = "name";
+            poiScript.centerAlt = 0;// float.Parse(elements[elements.Length - 1]);
             // enter the coordinate of the poi (assuming there is only one poi)
-            string[] latlon = elements[1].Split(',');
-            float coorLat = float.Parse(latlon[0]);
-            float coorLon = float.Parse(latlon[1]);
+            //string[] latlon = elements.Split(',');
+            float coorLat = float.Parse(elements[0]);
+            float coorLon = float.Parse(elements[1]);
             poiScript.setCoordinates(new List<Tuple<double, double>> { new Tuple<double, double>(coorLat, coorLon) });
 
             // this will determine the height of map center to be the same height as the closest coordinate to map center
