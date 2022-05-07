@@ -175,15 +175,15 @@ public class LeastSquareScript : MonoBehaviour
             countGpsSamplesConstantPositionZ >= Values.MIN_GPS_SAMPLES_TO_CONSTANT_MAP_FOR_STABILITY)
         {
             mapIsStable = true;
-            collisionDetector.SetActive(true);
-            shiftEnabledTextIndicator.text = "Y";
+            //collisionDetector.SetActive(true);
+            //shiftEnabledTextIndicator.text = "Y";
             File.AppendAllText(Application.persistentDataPath + "/LSTRACKER.txt", "YES" + "\n");
         }
         else
         {
             mapIsStable = false;
-            collisionDetector.SetActive(false);
-            shiftEnabledTextIndicator.text = "N";
+            //collisionDetector.SetActive(false);
+            //shiftEnabledTextIndicator.text = "N";
             File.AppendAllText(Application.persistentDataPath + "/LSTRACKER.txt", "NO" + "\n");
         }
     }

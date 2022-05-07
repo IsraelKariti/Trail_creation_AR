@@ -153,9 +153,19 @@ public class MapToppingsScript : MonoBehaviour
     }
     private void createSights()
     {
+        StreamReader reader;
         File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createSights\n");
 
-        StreamReader reader = new StreamReader(Application.persistentDataPath + "/sights.txt");
+        try
+        {
+            reader = new StreamReader(Application.persistentDataPath + "/sights.txt");
+
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e.ToString());
+            return;
+        }
         string line;
         while ((line = reader.ReadLine()) != null)
         {
@@ -189,9 +199,17 @@ public class MapToppingsScript : MonoBehaviour
 
     private void createWaterBuries()
     {
+        StreamReader reader;
         File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createWaterBuries\n");
-
-        StreamReader reader = new StreamReader(Application.persistentDataPath + "/water_bury.txt");
+        try
+        {
+            reader = new StreamReader(Application.persistentDataPath + "/water_bury.txt");
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e.ToString());
+            return;
+        }
         string line;
         while ((line = reader.ReadLine()) != null)
         {

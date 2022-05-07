@@ -64,11 +64,6 @@ public class MapScript : MonoBehaviour
         // create the sample 3D text
         GameObject sample = Instantiate(gpsSamplePrefab, Vector3.zero, Quaternion.identity, transform);
         sample.transform.localPosition = samplePosition;
-        // this is redundant i don't use the acc anymore, it's not accurate itself
-        //foreach(TextMeshPro tmp in sample.GetComponentsInChildren<TextMeshPro>())
-        //{
-        //    tmp.text = acc.ToString("0.0");
-        //}
         _samples.Add(sample);
     }
 

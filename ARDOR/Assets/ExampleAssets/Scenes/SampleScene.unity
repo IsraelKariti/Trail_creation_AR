@@ -355,7 +355,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arCam: {fileID: 22732920}
   gpsScript: {fileID: 734176019}
-  poiPrefab: {fileID: 0}
+  poiPrefab: {fileID: 2594845934421110169, guid: fe6a434e4ab49bd43a770ea8b2d44556,
+    type: 3}
   poiConnectorPrefab: {fileID: 3981283241879739336, guid: 466ea8a831c02ea4ab085b58fd990f48,
     type: 3}
   waterBuryPrefab: {fileID: 0}
@@ -648,7 +649,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpsScript: {fileID: 734176019}
-  gpsSamplePrefab: {fileID: 0}
+  gpsSamplePrefab: {fileID: 1031960360615598324, guid: 6b28ea1bf2522384485bf8340272e1da,
+    type: 3}
   arCam: {fileID: 22732920}
 --- !u!1 &2001777674
 GameObject:
@@ -695,7 +697,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gpsScript: {fileID: 734176019}
   camTransform: {fileID: 22732924}
-  groundSamplePrefab: {fileID: 0}
+  groundSamplePrefab: {fileID: 1031960360615598324, guid: 6b28ea1bf2522384485bf8340272e1da,
+    type: 3}
 --- !u!1 &2040622785
 GameObject:
   m_ObjectHideFlags: 0
