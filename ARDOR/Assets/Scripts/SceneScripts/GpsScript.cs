@@ -61,7 +61,7 @@ public class GpsScript : MonoBehaviour
     void Update()
     {
        
-        text.text = _skipSamples.ToString();
+        //text.text = _skipSamples.ToString();
         unityGPS();
         //EmulateGPS();
         File.AppendAllText(Application.persistentDataPath + "/gps.txt", "update\n");
