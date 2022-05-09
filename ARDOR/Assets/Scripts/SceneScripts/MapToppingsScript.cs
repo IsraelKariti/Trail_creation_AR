@@ -28,8 +28,8 @@ public class MapToppingsScript : MonoBehaviour
     private List<string> poiFileLines;
     private List<GameObject> pois;
     private List<GameObject> poiConnectors;
-    private List<GameObject> waterBuries;
-    private List<GameObject> sights;
+    //private List<GameObject> waterBuries;
+    //private List<GameObject> sights;
 
     private bool isVerticalLocked = false;
     private bool isHorizontalLocked = false;
@@ -48,8 +48,8 @@ public class MapToppingsScript : MonoBehaviour
 
         pois = new List<GameObject>();// point of interest(buildings, etc)
         poiConnectors = new List<GameObject>();// point of interest(buildings, etc)
-        waterBuries = new List<GameObject>();
-        sights = new List<GameObject>();
+        //waterBuries = new List<GameObject>();
+        //sights = new List<GameObject>();
         poiFileLines = new List<string>();
     }
 
@@ -89,10 +89,10 @@ public class MapToppingsScript : MonoBehaviour
         // poisitioning the pois can be done only after the map center has been determind (lat lon alt)
         positionPois();
         //2) read all lines from waterburi file
-        createWaterBuries();
+        //createWaterBuries();
 
         //3) create sights
-        createSights();
+        //createSights();
 
         // connect all pois to a route\path
         createPoiConnectors();// this can't be called on Awake because the connectors depend on the result calculation of the position of every poi on its Start function
@@ -154,86 +154,86 @@ public class MapToppingsScript : MonoBehaviour
             go.GetComponent<PoiScript>().positionPoiInMap();
         }
     }
-    private void createSights()
-    {
-        StreamReader reader;
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createSights\n");
+    //private void createSights()
+    //{
+    //    StreamReader reader;
+    //    File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createSights\n");
 
-        try
-        {
-            reader = new StreamReader(Application.persistentDataPath + "/sights.txt");
+    //    try
+    //    {
+    //        reader = new StreamReader(Application.persistentDataPath + "/sights.txt");
 
-        }
-        catch(Exception e)
-        {
-            Debug.Log(e.ToString());
-            return;
-        }
-        string line;
-        while ((line = reader.ReadLine()) != null)
-        {
-            GameObject go = Instantiate(sightPrefab, Vector3.zero, Quaternion.identity, transform);
-            go.GetComponent<SightScript>().arCam = arCam;
+    //    }
+    //    catch(Exception e)
+    //    {
+    //        Debug.Log(e.ToString());
+    //        return;
+    //    }
+    //    string line;
+    //    while ((line = reader.ReadLine()) != null)
+    //    {
+    //        GameObject go = Instantiate(sightPrefab, Vector3.zero, Quaternion.identity, transform);
+    //        go.GetComponent<SightScript>().arCam = arCam;
 
-            // get all elments in line
-            string[] elements = line.Split(' ');
+    //        // get all elments in line
+    //        string[] elements = line.Split(' ');
 
-            // set the altitude of the poi
-            SightScript sightScript = go.GetComponent<SightScript>();
-            sightScript.Name = elements[0].Replace('_', ' ');
-            sightScript.Lat = float.Parse(elements[1]);
-            sightScript.Lon = float.Parse(elements[2]);
-            sightScript.Alt = float.Parse(elements[3]);
-            sightScript.arCam = arCam;
-            go.GetComponent<TMP_Text>().text = elements[0].Replace('_', ' ');
+    //        // set the altitude of the poi
+    //        SightScript sightScript = go.GetComponent<SightScript>();
+    //        sightScript.Name = elements[0].Replace('_', ' ');
+    //        sightScript.Lat = float.Parse(elements[1]);
+    //        sightScript.Lon = float.Parse(elements[2]);
+    //        sightScript.Alt = float.Parse(elements[3]);
+    //        sightScript.arCam = arCam;
+    //        go.GetComponent<TMP_Text>().text = elements[0].Replace('_', ' ');
 
-            // position the sight on the map
-            sightScript.setSightOnMap();
-            sightScript.isPositioned = true;
-            // add to list of sights/signs
-            sights.Add(go);
+    //        // position the sight on the map
+    //        sightScript.setSightOnMap();
+    //        sightScript.isPositioned = true;
+    //        // add to list of sights/signs
+    //        sights.Add(go);
 
-        }
-        reader.Close();
+    //    }
+    //    reader.Close();
 
-        // sort the list of sights by distance from camera
-        sights.Sort(new CompareSightDist());
-    }
+    //    // sort the list of sights by distance from camera
+    //    sights.Sort(new CompareSightDist());
+    //}
 
-    private void createWaterBuries()
-    {
-        StreamReader reader;
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createWaterBuries\n");
-        try
-        {
-            reader = new StreamReader(Application.persistentDataPath + "/water_bury.txt");
-        }
-        catch(Exception e)
-        {
-            Debug.Log(e.ToString());
-            return;
-        }
-        string line;
-        while ((line = reader.ReadLine()) != null)
-        {
-            GameObject go = Instantiate(waterBuryPrefab, Vector3.zero, Quaternion.identity, transform);
+    //private void createWaterBuries()
+    //{
+    //    StreamReader reader;
+    //    File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createWaterBuries\n");
+    //    try
+    //    {
+    //        reader = new StreamReader(Application.persistentDataPath + "/water_bury.txt");
+    //    }
+    //    catch(Exception e)
+    //    {
+    //        Debug.Log(e.ToString());
+    //        return;
+    //    }
+    //    string line;
+    //    while ((line = reader.ReadLine()) != null)
+    //    {
+    //        GameObject go = Instantiate(waterBuryPrefab, Vector3.zero, Quaternion.identity, transform);
 
-            // get all elments in line
-            string[] elements = line.Split(' ');
+    //        // get all elments in line
+    //        string[] elements = line.Split(' ');
 
-            // set the altitude of the poi
-            WaterBuryScript waterBuryScript = go.GetComponent<WaterBuryScript>();
-            waterBuryScript.lat = float.Parse(elements[0]);
-            waterBuryScript.lon = float.Parse(elements[1]);
-            waterBuryScript.alt = float.Parse(elements[2]);
-            // position the water bury in map
-            waterBuryScript.positionWaterBuryInMap();
-            waterBuryScript.isPositioned = true;
-            waterBuries.Add(go);
+    //        // set the altitude of the poi
+    //        WaterBuryScript waterBuryScript = go.GetComponent<WaterBuryScript>();
+    //        waterBuryScript.lat = float.Parse(elements[0]);
+    //        waterBuryScript.lon = float.Parse(elements[1]);
+    //        waterBuryScript.alt = float.Parse(elements[2]);
+    //        // position the water bury in map
+    //        waterBuryScript.positionWaterBuryInMap();
+    //        waterBuryScript.isPositioned = true;
+    //        waterBuries.Add(go);
 
-        }
-        reader.Close();
-    }
+    //    }
+    //    reader.Close();
+    //}
 
     // this method is for create the route the hiker is following
     private void createPoiConnectors()
@@ -255,12 +255,12 @@ public class MapToppingsScript : MonoBehaviour
         }
     }
     // this function induce the signs to be rearrange so they won't hide each other
-    private void SetRearrangingSightsActive()
-    {
-        sights.Sort(new CompareSightDist());
-        indexSight = 0;
-        activlyRearrangingSights = true;
-    }
+    //private void SetRearrangingSightsActive()
+    //{
+    //    sights.Sort(new CompareSightDist());
+    //    indexSight = 0;
+    //    activlyRearrangingSights = true;
+    //}
     private void Update()
     {
         // if the topping hasn't been set yet than don't do anything
@@ -275,19 +275,19 @@ public class MapToppingsScript : MonoBehaviour
             // move each sight on different frame,
             // so that the affects on one sight can be taken into account in the second sight
             // this call is making the sign to not hide each other
-            if (activlyRearrangingSights && indexSight < sights.Count)
-            {
-                sights[indexSight++].GetComponent<SightScript>().Reheight();
-                if(indexSight == sights.Count)
-                    File.AppendAllText(Application.persistentDataPath + "/reheight.txt", "\n\n\n\n\n");
+            //if (activlyRearrangingSights && indexSight < sights.Count)
+            //{
+            //    sights[indexSight++].GetComponent<SightScript>().Reheight();
+            //    if(indexSight == sights.Count)
+            //        File.AppendAllText(Application.persistentDataPath + "/reheight.txt", "\n\n\n\n\n");
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
 
-                activlyRearrangingSights = false;
+            //    activlyRearrangingSights = false;
 
-            }
+            //}
         }
     }
 
@@ -422,23 +422,6 @@ public class MapToppingsScript : MonoBehaviour
             verticalIndicationText.text = "V";
 
         }
-
-        // this will invoke the dependency of the height map from the y value of the camera
-        // after this line the height of the map will be lock to the height of the first
-        //if (gpsScript.sampleCountForInitialMapPosition > 5)// this should only occur if the map is positioned already geographcally
-        //{
-        //    isHeightLocked = true;
-        //    // If i could count on the AR of the phone to give accurate y axis changes during a long period of time than this next lines are redundant
-        //    // but just to make sure the height of the map is correct i will run this code every time the user is passing a poi
-        //    // set the height of the map to a fixed height based on the height of the poi (assuming user is walking on ground + holding the phone at 1.1m height above ground)
-        //    float poiLocalYInMap = turn.gameObject.transform.parent.localPosition.y;
-        //    float camHeightInAR = arCam.transform.position.y;
-        //    float userFeetHeightInAR = camHeightInAR - 1.1f;
-        //    //how much to lift the map:
-        //    float liftTheMap = userFeetHeightInAR - poiLocalYInMap;
-        //    // change map height
-        //    transform.position = new Vector3(transform.position.x, liftTheMap, transform.position.z);
-        //}
 
     }
 
