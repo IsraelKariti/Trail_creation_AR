@@ -78,18 +78,16 @@ public class DrawScript : MonoBehaviour
         }
     }
 
-    public void CreateCoordFile(bool b)
+    public void CreateCoordFile()
     {
-        if(b == false)
+        Debug.Log("creat file");
+        File.Delete(Application.persistentDataPath + "/pois.txt");
+        File.AppendAllText(Application.persistentDataPath + "/pois.txt", "lat,lon\n");
+        foreach(Vector2d v in coordList)
         {
-            Debug.Log("creat file");
-            File.Delete(Application.persistentDataPath + "/pois.txt");
-            File.AppendAllText(Application.persistentDataPath + "/pois.txt", "lat,lon\n");
-            foreach(Vector2d v in coordList)
-            {
-                File.AppendAllText(Application.persistentDataPath + "/pois.txt", v.x+","+v.y+"\n");
+            File.AppendAllText(Application.persistentDataPath + "/pois.txt", v.x+","+v.y+"\n");
 
-            }
         }
+        coordList = new List<Vector2d>();
     }
 }

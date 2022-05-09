@@ -7,11 +7,13 @@ public class ToggleScript : MonoBehaviour
     public GameObject map;
     public GameObject UImap;
     public GameObject toggleDraw;
+    public GameObject btn;
     public void flipMap(bool b)
     {
         map.SetActive(b);
         UImap.SetActive(b);
         toggleDraw.SetActive(b);
+        btn.SetActive(b);   
     }
 
 }
