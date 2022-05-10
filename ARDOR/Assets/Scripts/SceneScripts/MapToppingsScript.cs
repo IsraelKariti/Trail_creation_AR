@@ -16,10 +16,7 @@ public class MapToppingsScript : MonoBehaviour
     public GameObject sightPrefab;
     public Text horizontalIndicationText;
     public Text verticalIndicationText;
-    public double MapCenterLat { get { return mapcenterLat; } set { mapcenterLat = value; } }
-    public double MapCenterLon { get { return mapcenterLon; } set { mapcenterLon = value; } }
-    public float MapCenterAlt { get => mapCenterAlt; set => mapCenterAlt = value; }
-    public bool IsHorizontalLocked { get => isHorizontalLocked; set => isHorizontalLocked = value; }
+
 
     private double mapcenterLat;
     private double mapcenterLon;
@@ -36,6 +33,11 @@ public class MapToppingsScript : MonoBehaviour
     private int indexSight = 0;
     private bool activlyRearrangingSights = false;
     private bool isMapToppingsIntialized = false;
+
+    public double MapCenterLat { get { return mapcenterLat; } set { mapcenterLat = value; } }
+    public double MapCenterLon { get { return mapcenterLon; } set { mapcenterLon = value; } }
+    public float MapCenterAlt { get => mapCenterAlt; set => mapCenterAlt = value; }
+    public bool IsHorizontalLocked { get => isHorizontalLocked; set => isHorizontalLocked = value; }
 
     private void Awake()
     {
