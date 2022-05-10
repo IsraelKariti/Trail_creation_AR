@@ -72,6 +72,8 @@ public class MapToppingsScript : MonoBehaviour
     }
     public void createMapToppings()
     {
+        deletePrevPois();
+
         createPois();
 
         // poisitioning the pois can be done only after the map center has been determind (lat lon alt)
@@ -85,6 +87,21 @@ public class MapToppingsScript : MonoBehaviour
         // connect all pois to a route\path
         createPoiConnectors();// this can't be called on Awake because the connectors depend on the result calculation of the position of every poi on its Start function
 
+    }
+
+    private void deletePrevPois()
+    {
+        foreach(GameObject go in pois)
+        {
+            go.Destroy();
+        }
+        foreach(GameObject go in poiConnectors)
+        {
+            go.Destroy();
+        }
+        pois = new List<GameObject>();// point of interest(buildings, etc)
+        poiConnectors = new List<GameObject>();// point of interest(buildings, etc)
+        poiFileLines = new List<string>();
     }
 
     public void createPois()
