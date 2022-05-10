@@ -16,7 +16,11 @@ public class DrawScript : MonoBehaviour
     private bool minimapLocked = false;
     private double EARTH_CIRCUMFERENCE = 40075016.685578d;
     private List<Vector2d> coordList = new List<Vector2d>();
-    public bool MinimapLocked { get => minimapLocked; set => minimapLocked = value; }
+    private List<Vector2> touchPosList = new List<Vector2>();
+    public bool MinimapLocked { get => minimapLocked; set { minimapLocked = value;
+            if (minimapLocked == true)
+                coordList = new List<Vector2d>();
+        } }
 
     private void CalcPin(Vector3 p)
     {
