@@ -16,7 +16,7 @@ public class MapToppingsScript : MonoBehaviour
     public GameObject sightPrefab;
     public Text horizontalIndicationText;
     public Text verticalIndicationText;
-
+    public GameObject ShowRoadBtn;
 
     private double mapcenterLat;
     private double mapcenterLon;
@@ -63,14 +63,14 @@ public class MapToppingsScript : MonoBehaviour
 
             mapcenterLat = lat;
             mapcenterLon = lon;
-
-            createMapToppings();
+            ShowRoadBtn.SetActive(true);
+            //createMapToppings();
 
             //InvokeRepeating("SetRearrangingSightsActive", 0, 2);
             isMapToppingsIntialized = true;
         }
     }
-    private void createMapToppings()
+    public void createMapToppings()
     {
         createPois();
 
