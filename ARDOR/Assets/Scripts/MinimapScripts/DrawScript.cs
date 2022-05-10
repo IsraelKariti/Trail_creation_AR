@@ -7,7 +7,7 @@ using Mapbox.Utils;
 using UnityEngine.UI;
 using System;
 using System.IO;
-
+//37.7648, -122.463
 public class DrawScript : MonoBehaviour
 {
     public Camera cam;
