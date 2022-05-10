@@ -66,7 +66,7 @@ public class MapToppingsScript : MonoBehaviour
 
             createMapToppings();
 
-            InvokeRepeating("SetRearrangingSightsActive", 0, 2);
+            //InvokeRepeating("SetRearrangingSightsActive", 0, 2);
             isMapToppingsIntialized = true;
         }
     }
