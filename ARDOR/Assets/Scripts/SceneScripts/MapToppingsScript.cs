@@ -39,13 +39,6 @@ public class MapToppingsScript : MonoBehaviour
 
     private void Awake()
     {
-        File.Delete(Application.persistentDataPath + "/walkedParallel.txt");
-        File.Delete(Application.persistentDataPath + "/vertical_collision.txt");
-
-        File.Delete(Application.persistentDataPath + "/toppingsLog.txt");
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "awake");
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "isMapToppingsIntialized: " + isMapToppingsIntialized + "\n");
-
         pois = new List<GameObject>();// point of interest(buildings, etc)
         poiConnectors = new List<GameObject>();// point of interest(buildings, etc)
         //waterBuries = new List<GameObject>();
@@ -56,19 +49,13 @@ public class MapToppingsScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "start");
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "isMapToppingsIntialized: " + isMapToppingsIntialized + "\n");
-
         gpsScript.GpsUpdatedSetMap += OnGpsUpdated;
     }
     public void OnGpsUpdated(double lat, double lon, float acc)
     {
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "OnGpsUpdated\n");
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "isMapToppingsIntialized: "+ isMapToppingsIntialized+"\n");
         // this will only ever happen once
         if (!isMapToppingsIntialized)
         {
-            File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "!isMapToppingsIntialized\n");
 
             // initialize the LAT+LON+ALT of the map to be from the first poi
 
@@ -83,7 +70,6 @@ public class MapToppingsScript : MonoBehaviour
     }
     private void createMapToppings()
     {
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createMapToppings\n");
         createPois();
 
         // poisitioning the pois can be done only after the map center has been determind (lat lon alt)
@@ -101,7 +87,6 @@ public class MapToppingsScript : MonoBehaviour
 
     public void createPois()
     {
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createPois\n");
 
         //1) read all lines from poi file
         StreamReader reader = new StreamReader(Application.persistentDataPath + "/pois.txt");
@@ -138,7 +123,6 @@ public class MapToppingsScript : MonoBehaviour
             }
 
             pois.Add(go);
-            File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "poi pos: "+go.transform.position+"\n");
         }
         // after i have set the toppings center alt i do the same for the parent map
         transform.parent.gameObject.GetComponent<MapScript>().MapCenterAlt = mapCenterAlt;
@@ -147,7 +131,6 @@ public class MapToppingsScript : MonoBehaviour
 
     private void positionPois()
     {
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "positionPois\n");
 
         foreach (GameObject go in pois)
         {
@@ -238,7 +221,6 @@ public class MapToppingsScript : MonoBehaviour
     // this method is for create the route the hiker is following
     private void createPoiConnectors()
     {
-        File.AppendAllText(Application.persistentDataPath + "/toppingsLog.txt", "createPoiConnectors\n");
 
         // assuming the pois are in their order of walking 
         for (int i = 0; i < pois.Count - 1; i++)
@@ -337,9 +319,6 @@ public class MapToppingsScript : MonoBehaviour
     // this function can't determine the height as this path is 1 meters away from the poi, so the height is not determined as good as in the poi
     public void OnUserWalkedParallelToConnector(Vector2 designatedLocalShiftInMapXZ)
     {
-        File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "\n\n\n\n\n"+ DateTime.Now+ "\n");
-        File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", ""+ DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond + "\n");
-        File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "parallel\n");
 
         // this only occur if the map is positioned already geographcally stable enough
         // otherwise the LS script won't enable the detection game object
@@ -353,14 +332,6 @@ public class MapToppingsScript : MonoBehaviour
             Vector3 designatedLocalToppingsPosition = transform.localPosition + designatedLocalShiftInMapXYZ;
             Vector2 designatedLocalToppingsPositionXZ = new Vector2(designatedLocalToppingsPosition.x, designatedLocalToppingsPosition.z);
 
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "isHorizontalLocked: " + isHorizontalLocked + "\n");
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "globalToppingsPos: "+ globalToppingsPos+"\n");
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "localToppingsPos: "+ transform.localPosition+"\n");
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "shiftXYZ: " + designatedLocalShiftInMapXYZ + "\n");
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "designatedLocalToppingsPosition: " + designatedLocalToppingsPosition + "\n");
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "designatedLocalToppingsPositionXZ.sqrMagnitude: " + designatedLocalToppingsPositionXZ.sqrMagnitude + "\n");
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "Values.GPS_ERROR_RADIUS_SQRD: " + Values.GPS_ERROR_RADIUS_SQRD + "\n");
-
             // check if the toppings will move horizontally to a place within the gps error radius
             if ( designatedLocalToppingsPositionXZ.sqrMagnitude < Values.GPS_ERROR_RADIUS_SQRD &&
                 designatedLocalShiftInMapXZ.sqrMagnitude > Values.MIN_THRESHOLD_SHIFT_SQRD)
@@ -369,13 +340,7 @@ public class MapToppingsScript : MonoBehaviour
                 transform.localPosition += designatedLocalShiftInMapXYZ;// the shift is 2 dimension XZ, so the y value of the vector is the z global axis
                 isHorizontalLocked = true;
                 horizontalIndicationText.text = "H";
-                // move the map toppings with respect to the base map
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "TOPPINGS SHIFTED!" + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "AFTER SHIFT toppings global pos: " + transform.position + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "AFTER SHIFT toppings local pos: " + transform.localPosition + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "AFTER SHIFT map->toppings: " + Vector3.Distance(transform.position, transform.parent.position) + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "AFTER SHIFT isHorizontalLocked: " + isHorizontalLocked + "\n");
-
+                
             }
             // only if the user is far away from the map (ex. on the other side of valley then reset)
             else if(designatedLocalToppingsPositionXZ.sqrMagnitude > Values.GPS_ERROR_RADIUS_SQRD)// if the shift of the toppings is not subltle anymore and the designated position is out of the 4 meter radius
@@ -386,19 +351,12 @@ public class MapToppingsScript : MonoBehaviour
                 horizontalIndicationText.text = "";
                 verticalIndicationText.text = "";
 
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "TOPPINGS RESET!" + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "TOPPINGS RESET toppings global pos: " + transform.position + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "TOPPINGS RESET toppings local pos: " + transform.localPosition + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "TOPPINGS RESET isHorizontalLocked: " + isHorizontalLocked + "\n");
-                File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "TOPPINGS RESET isVerticalLocked: " + isVerticalLocked + "\n");
             }
         }
     }
     // this is called when the user (holding the phone and camera) is above the poi
     public void OnCamTriggeredPoiEnter(Collider turn)
     {
-        File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "\n\n\n\n\nentered vertical collision" + "\n");
-        File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "isHorizontalLocked: "+ isHorizontalLocked + "\n");
 
         // if the toppings are aligned with the actual physical trail than the pois are located on the actual physical coords
         if (isHorizontalLocked)
@@ -407,18 +365,13 @@ public class MapToppingsScript : MonoBehaviour
             // but just to make sure the height of the map is correct i will run this code every time the user is passing a poi
             // set the height of the map to a fixed height based on the height of the poi (assuming user is walking on ground + holding the phone at 1.1m height above ground)
             float poiLocalYInMap = turn.transform.parent.localPosition.y;
-            File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "poiLocalYInMap: " + poiLocalYInMap + "\n");
             float camHeightInAR = arCam.transform.position.y;
-            File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "camHeightInAR: " + camHeightInAR + "\n");
             float userFeetHeightInAR = camHeightInAR - 1.1f;
-            File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "userFeetHeightInAR: " + userFeetHeightInAR + "\n");
             //how much to lift the map:
             float liftTheMap = userFeetHeightInAR - poiLocalYInMap;
-            File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "liftTheMap: " + liftTheMap + "\n");
             // change map height
             transform.position = new Vector3(transform.position.x, liftTheMap, transform.position.z);
             isVerticalLocked = true;
-            File.AppendAllText(Application.persistentDataPath + "/vertical_collision.txt", "isVerticalLocked: " + isVerticalLocked + "\n");
             verticalIndicationText.text = "V";
 
         }
