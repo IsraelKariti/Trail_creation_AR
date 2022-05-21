@@ -72,6 +72,7 @@ public class MapToppingsScript : MonoBehaviour
     }
     public void createMapToppings()
     {
+        Debug.Log("createMapToppings YEEPEE!");
         deletePrevPois();
 
         createPois();

@@ -12,6 +12,7 @@ public class DrawScript : MonoBehaviour
 {
     public Camera cam;
     public AbstractMap map;
+    public UILineRenderer lineRenderer;
     //public Text banner;
     private bool minimapLocked = false;
     private double EARTH_CIRCUMFERENCE = 40075016.685578d;
@@ -64,18 +65,24 @@ public class DrawScript : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 pos = Input.mousePosition;
-            if(pos.x<1024 && pos.y <1024)
-            CalcPin(pos);
-        }
+            Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            if(mousePos.x<1024 && mousePos.y < 1024)
+            {
+                touchPosList.Add(mousePos);
+                lineRenderer.Points = touchPosList;
 
-        if (Input.touchCount > 0)
+                CalcPin(new Vector3(mousePos.x, mousePos.y, cam.transform.localPosition.y));
+
+            }
+        }
+        else if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began && touch.position.x<1024 && touch.position.y<1024)
+            Vector2 touchPos = touch.position;
+            if ( touchPos.x<1024 && touchPos.y<1024)
             {
-
+                touchPosList.Add(touch.position);
+                lineRenderer.Points = touchPosList;
                 CalcPin(new Vector3(touch.position.x, touch.position.y, cam.transform.localPosition.y));
 
             }
