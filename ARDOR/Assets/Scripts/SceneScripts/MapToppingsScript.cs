@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using Mapbox.Unity.Map;
 
 public class MapToppingsScript : MonoBehaviour
 {
@@ -17,7 +18,9 @@ public class MapToppingsScript : MonoBehaviour
     public Text horizontalIndicationText;
     public Text verticalIndicationText;
     public GameObject ShowRoadBtn;
-
+    public GameObject ToggleMap2DBtn;
+    public AbstractMap abstractMap;
+     
     private double mapcenterLat;
     private double mapcenterLon;
     private float mapCenterAlt;
@@ -64,6 +67,9 @@ public class MapToppingsScript : MonoBehaviour
             mapcenterLat = lat;
             mapcenterLon = lon;
             ShowRoadBtn.SetActive(true);
+            ToggleMap2DBtn.SetActive(true);
+            abstractMap.Options.locationOptions.latitudeLongitude = ""+lat+","+lon;
+
             //createMapToppings();
 
             //InvokeRepeating("SetRearrangingSightsActive", 0, 2);

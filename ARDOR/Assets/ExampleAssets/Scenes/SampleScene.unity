@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &21660390
 RectTransform:
   m_ObjectHideFlags: 0
@@ -480,6 +480,8 @@ MonoBehaviour:
   horizontalIndicationText: {fileID: 0}
   verticalIndicationText: {fileID: 0}
   ShowRoadBtn: {fileID: 1081190917}
+  ToggleMap2DBtn: {fileID: 21660389}
+  abstractMap: {fileID: 1590799934}
 --- !u!1 &327897751
 GameObject:
   m_ObjectHideFlags: 0
