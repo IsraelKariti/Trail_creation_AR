@@ -70,6 +70,7 @@
 
 			if (Input.touchSupported && Input.touchCount > 0)
 			{
+				Debug.Log("poopeer touch count: " + Input.touchCount);
 				HandleTouch();
 			}
 			else
@@ -101,11 +102,14 @@
 		void HandleTouch()
 		{
 			float zoomFactor = 0.0f;
+
 			//pinch to zoom.
 			switch (Input.touchCount)
 			{
 				case 1:
 					{
+						Debug.Log("poopeer case 1: " );
+
 						PanMapUsingTouchOrMouse();
 					}
 					break;
@@ -174,8 +178,10 @@
 
 		void UseMeterConversion()
 		{
+
 			if (Input.GetMouseButtonUp(1))
 			{
+
 				var mousePosScreen = Input.mousePosition;
 				//assign distance of camera to ground plane to z, otherwise ScreenToWorldPoint() will always return the position of the camera
 				//http://answers.unity3d.com/answers/599100/view.html
@@ -183,7 +189,6 @@
 				var pos = _referenceCamera.ScreenToWorldPoint(mousePosScreen);
 
 				var latlongDelta = _mapManager.WorldToGeoPosition(pos);
-				Debug.Log("Latitude: " + latlongDelta.x + " Longitude: " + latlongDelta.y);
 			}
 
 			if (Input.GetMouseButton(0)/* && !EventSystem.current.IsPointerOverGameObject()*/)
@@ -204,10 +209,8 @@
 			{
 				_shouldDrag = false;
 			}
-
 			if (_shouldDrag == true)
 			{
-
 				var changeFromPreviousPosition = _mousePositionPrevious - _mousePosition;
 
 				if (Mathf.Abs(changeFromPreviousPosition.x) > 0.0f || Mathf.Abs(changeFromPreviousPosition.y) > 0.0f)
@@ -219,7 +222,6 @@
 					{
 						if (null != _mapManager)
 						{
-							Debug.Log("UnityTileSize: " + _mapManager.UnityTileSize);
 							float factor = _panSpeed * Conversions.GetTileScaleInMeters((float)0, _mapManager.AbsoluteZoom) / _mapManager.UnityTileSize;
 							var latlongDelta = Conversions.MetersToLatLon(new Vector2d(offset.x * factor, offset.z * factor));
 							var newLatLong = _mapManager.CenterLatitudeLongitude + latlongDelta;
@@ -231,12 +233,12 @@
 				}
                 else// in case this is the first frame the mouse is pressed down
                 {
-                    //if (EventSystem.current.IsPointerOverGameObject())
-                    //{
+					//if (EventSystem.current.IsPointerOverGameObject())
+					//{
 
-                    //	return;
-                    //}
-                    _mousePositionPrevious = _mousePosition;
+					//	return;
+					//}
+					_mousePositionPrevious = _mousePosition;
                     _origin = _mousePosition;
                 }
             }

@@ -9,6 +9,7 @@ public class ToggleScript : MonoBehaviour
     public GameObject toggleDraw;
     public GameObject btn;
     public GameObject lineDrawer;
+    public GameObject toggleSatellite;
     public void flipMap(bool b)
     {
         map.SetActive(b);
@@ -16,6 +17,7 @@ public class ToggleScript : MonoBehaviour
         toggleDraw.SetActive(b);
         btn.SetActive(b);
         lineDrawer.SetActive(b);
+        toggleSatellite.SetActive(b);
     }
 
 }

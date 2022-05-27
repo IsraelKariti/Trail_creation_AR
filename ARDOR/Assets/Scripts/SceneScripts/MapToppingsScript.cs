@@ -349,7 +349,7 @@ public class MapToppingsScript : MonoBehaviour
         // this only occur if the map is positioned already geographcally stable enough
         // otherwise the LS script won't enable the detection game object
         {
-            File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "gps samples: "+ gpsScript.sampleCountForInitialMapPosition + "\n");
+            //File.AppendAllText(Application.persistentDataPath + "/walkedParallel.txt", "gps samples: "+ gpsScript.sampleCountForInitialMapPosition + "\n");
 
             //since the toppings can only move in a radius of 3 meters from the gps induced map
             // we have to make sure that the toppings will be in this bound
