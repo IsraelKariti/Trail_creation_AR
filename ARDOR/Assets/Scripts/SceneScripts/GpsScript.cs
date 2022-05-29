@@ -19,6 +19,8 @@ public class GpsScript : MonoBehaviour
     private float _avgLon;
     private bool _gpsOn;
     private int _sampleCountForInitialMapPosition=0;
+    private int gpsSampleCounter = 0;
+    private bool initMap2D = false;
     public int sampleCountForInitialMapPosition { get { return _sampleCountForInitialMapPosition; } }
     public float avgLat { get { return _avgLat; } }
     public float avgLon { get { return _avgLon; } }
@@ -26,8 +28,9 @@ public class GpsScript : MonoBehaviour
     // listener for the map+ground
 
     public delegate void GpsUpdatedSetSampleEventHandler(double lat, double lon, float acc);
+    public event GpsUpdatedSetSampleEventHandler GpsUdated_LoadMap2D;
     public event GpsUpdatedSetSampleEventHandler GpsInitialized;
-    public event GpsUpdatedSetSampleEventHandler GpsUpdatedSetMap;
+    public event GpsUpdatedSetSampleEventHandler GpsUpdated_SetARMap;
     public delegate void GpsUpdatedLeastSquaresEventHandler();
     public event GpsUpdatedLeastSquaresEventHandler GpsUpdatedCalcLeastSquares;
     public bool gpsOn { set { _gpsOn = value; } }
@@ -86,44 +89,47 @@ public class GpsScript : MonoBehaviour
             inAltAcc = Input.location.lastData.verticalAccuracy;
             prevTimeStamp = Input.location.lastData.timestamp;
 
-            if (_skipSamples > SKIP_SAMPLES)
-                _skipSamples--;
-            else
-            {
-                if(initiated == false)
-                {
-                    GpsInitialized(inLat, inLon, inHorizontalAcc);
-                    initiated = true;
-                }
+            // when i get the first gps sample, it is googd enough for me to create 2D map
 
-                _sampleCountForInitialMapPosition++;
-                
-                OnGpsUpdated();
+            if(gpsSampleCounter == 0)
+            {
+                GpsUdated_LoadMap2D(inLat, inLon, inHorizontalAcc);
+                gpsSampleCounter++;
+                return;
             }
+
+            if(gpsSampleCounter>0 && gpsSampleCounter <= 10)
+            {
+                gpsSampleCounter++;
+                return;
+            }
+
+            OnGpsUpdated();
+            
+            /////////////////////
+            //if (_skipSamples > SKIP_SAMPLES)
+            //{
+
+            //    _skipSamples--;
+            //}
+            //else
+            //{
+            //    if (initiated == false)
+            //    {
+            //        GpsInitialized(inLat, inLon, inHorizontalAcc);
+            //        initiated = true;
+            //    }
+
+            //    _sampleCountForInitialMapPosition++;
+
+            //    OnGpsUpdated();
+            //}
         }
     }
 
     public void OnGpsUpdated()
     {
-        //File.AppendAllText(Application.persistentDataPath + "/gps.txt", "OnGpsUpdated\n");
-
-        //File.AppendAllText(Application.persistentDataPath + "/coordinates.txt", "" + inLat + "," + inLon + "\n");
-        
-        
-        GpsUpdatedSetMap(inLat, inLon, inHorizontalAcc);
+        GpsUpdated_SetARMap(inLat, inLon, inHorizontalAcc);
         GpsUpdatedCalcLeastSquares();
     }
-
-    //public void EmulateGPS()
-    //{
-    //    _sampleCountForInitialMapPosition++;
-    //    GpsUpdatedSetMap(31f, emuLon, 3);
-    //    GpsUpdatedCalcLeastSquares();
-    //    emuLon -= 0.0001f;
-    //}
-
-    //public void switchGPS(bool val)
-    //{
-    //    gpsOn = val;
-    //}
 }

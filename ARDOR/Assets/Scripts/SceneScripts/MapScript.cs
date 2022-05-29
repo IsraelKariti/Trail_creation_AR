@@ -36,7 +36,7 @@ public class MapScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gpsScript.GpsUpdatedSetMap += OnGpsUpdated;
+        gpsScript.GpsUpdated_SetARMap += OnGpsUpdated;
     }
     public void OnGpsUpdated(double lat, double lon, float acc)
     {
