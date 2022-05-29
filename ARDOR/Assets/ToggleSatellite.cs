@@ -10,9 +10,9 @@ public class ToggleSatellite : MonoBehaviour
     public Sprite street;
     public Sprite satellite;
 
+    // longer
     public void toggleSatellite(bool b)
     {
-        // toggle satellite
         IImageryLayer imageLayer = abstractMap.ImageLayer;
         if (imageLayer.LayerSource == ImagerySourceType.MapboxSatellite)
         {
