@@ -12,7 +12,7 @@ public class ToggleSatellite : MonoBehaviour
 
     public void toggleSatellite(bool b)
     {
-
+        // toggle satellite
         IImageryLayer imageLayer = abstractMap.ImageLayer;
         if (imageLayer.LayerSource == ImagerySourceType.MapboxSatellite)
         {
