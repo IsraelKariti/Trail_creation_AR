@@ -67,14 +67,9 @@ public class DrawScript : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-
-            
-
             //if(mousePos.x<1024 && mousePos.y < 1024)// probably not longer needer
-
             if (!IsPointerOverUIElement())
             {
-                if (!IsPointerOverUIElement())
                 touchPosList.Add(mousePos);
                 lineRenderer.Points = touchPosList;
 

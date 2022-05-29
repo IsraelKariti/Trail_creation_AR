@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mapbox.Unity.Map;
-using UnityEngine.UI;
 public class ToggleSatellite : MonoBehaviour
 {
     public AbstractMap abstractMap;
