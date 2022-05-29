@@ -7,6 +7,7 @@ using Mapbox.Utils;
 using UnityEngine.UI;
 using System;
 using System.IO;
+using UnityEngine.EventSystems;
 //37.7648, -122.463
 public class DrawScript : MonoBehaviour
 {
@@ -63,11 +64,13 @@ public class DrawScript : MonoBehaviour
         if (!minimapLocked)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            if(mousePos.x<1024 && mousePos.y < 1024)
+            //if(mousePos.x<1024 && mousePos.y < 1024)
+            if (!IsPointerOverUIElement())
             {
+                if (!IsPointerOverUIElement())
                 touchPosList.Add(mousePos);
                 lineRenderer.Points = touchPosList;
 
@@ -75,18 +78,18 @@ public class DrawScript : MonoBehaviour
 
             }
         }
-        else if (Input.touchCount > 0)
-        {
-            touch = Input.GetTouch(0);
-            Vector2 touchPos = touch.position;
-            if ( touchPos.x<1024 && touchPos.y<1024)
-            {
-                touchPosList.Add(touch.position);
-                lineRenderer.Points = touchPosList;
-                CalcPin(new Vector3(touch.position.x, touch.position.y, cam.transform.localPosition.y));
+        //else if (Input.touchCount > 0)
+        //{
+        //    touch = Input.GetTouch(0);
+        //    Vector2 touchPos = touch.position;
+        //    if ( touchPos.x<1024 && touchPos.y<1024)
+        //    {
+        //        touchPosList.Add(touch.position);
+        //        lineRenderer.Points = touchPosList;
+        //        CalcPin(new Vector3(touch.position.x, touch.position.y, cam.transform.localPosition.y));
 
-            }
-        }
+        //    }
+        //}
     }
 
     public void CreateCoordFile()
@@ -100,5 +103,34 @@ public class DrawScript : MonoBehaviour
 
         }
         coordList = new List<Vector2d>();
+    }
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.tag != "map2DRawImage")
+                return true;
+        }
+        return false;
+    }
+
+
+    //Gets all event system raycast results of current mouse or touch position.
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
     }
 }
