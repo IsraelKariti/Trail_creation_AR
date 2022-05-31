@@ -46,7 +46,7 @@ public class LeastSquareScript : MonoBehaviour
     {
         mapSamples = mapScript.mapSamples;
         groundSamples = groundScript.groundSamples;
-        gpsScript.GpsUpdatedCalcLeastSquares += OnGpsUpdated;
+        gpsScript.GpsUpdated_CalcLeastSquares += OnGpsUpdated;
         File.Delete(Application.persistentDataPath + "/mapPos.txt");
         File.Delete(Application.persistentDataPath + "/gpsForShift.txt");
         File.Delete(Application.persistentDataPath + "/LSTRACKER.txt");

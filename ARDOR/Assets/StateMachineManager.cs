@@ -13,6 +13,7 @@ public class StateMachineManager : MonoBehaviour
     public GameObject btn;
     public GameObject lineDrawer;
     public GameObject toggleSatellite;
+    public GameObject toggleMinimap;
     public void flipMap(bool b)
     {
         map.SetActive(b);
@@ -26,6 +27,7 @@ public class StateMachineManager : MonoBehaviour
     void Start()
     {
         gpsScript.GpsUdated_LoadMap2D += OnGpsInit;
+        gpsScript.GpsUpdated_EnableARButton += OnEnableAR;
     }
 
     // Update is called once per frame
@@ -33,7 +35,10 @@ public class StateMachineManager : MonoBehaviour
     {
         
     }
-
+    public void OnEnableAR(double lat, double lon, float acc)
+    {
+        toggleMinimap.SetActive(true);
+    }
     public void OnGpsInit(double lat, double lon, float acc)
     {
         initPanel.SetActive(false);

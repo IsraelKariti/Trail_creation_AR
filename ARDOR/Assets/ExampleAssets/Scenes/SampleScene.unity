@@ -155,7 +155,7 @@ RectTransform:
   - {fileID: 695080059}
   - {fileID: 1811319664}
   m_Father: {fileID: 1424035072}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -464,6 +464,7 @@ MonoBehaviour:
   btn: {fileID: 1664238758}
   lineDrawer: {fileID: 1833345953}
   toggleSatellite: {fileID: 965869793}
+  toggleMinimap: {fileID: 21660389}
 --- !u!4 &223974228
 Transform:
   m_ObjectHideFlags: 0
@@ -1933,8 +1934,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 21660390}
   - {fileID: 1820906066}
+  - {fileID: 21660390}
   - {fileID: 1597537609}
   - {fileID: 1664238759}
   - {fileID: 1081190918}
@@ -2526,7 +2527,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1424035072}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

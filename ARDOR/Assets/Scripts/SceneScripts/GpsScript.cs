@@ -29,10 +29,11 @@ public class GpsScript : MonoBehaviour
 
     public delegate void GpsUpdatedSetSampleEventHandler(double lat, double lon, float acc);
     public event GpsUpdatedSetSampleEventHandler GpsUdated_LoadMap2D;
+    public event GpsUpdatedSetSampleEventHandler GpsUpdated_EnableARButton;
     public event GpsUpdatedSetSampleEventHandler GpsInitialized;
     public event GpsUpdatedSetSampleEventHandler GpsUpdated_SetARMap;
     public delegate void GpsUpdatedLeastSquaresEventHandler();
-    public event GpsUpdatedLeastSquaresEventHandler GpsUpdatedCalcLeastSquares;
+    public event GpsUpdatedLeastSquaresEventHandler GpsUpdated_CalcLeastSquares;
     public bool gpsOn { set { _gpsOn = value; } }
 
     private double inLat;// the input location lat 
@@ -103,7 +104,12 @@ public class GpsScript : MonoBehaviour
                 gpsSampleCounter++;
                 return;
             }
-
+            if (gpsSampleCounter == 11)
+            {
+                GpsUpdated_EnableARButton(inLat, inLon, inHorizontalAcc);
+                gpsSampleCounter++;
+                return;
+            }
             OnGpsUpdated();
             
             /////////////////////
@@ -130,6 +136,6 @@ public class GpsScript : MonoBehaviour
     public void OnGpsUpdated()
     {
         GpsUpdated_SetARMap(inLat, inLon, inHorizontalAcc);
-        GpsUpdatedCalcLeastSquares();
+        GpsUpdated_CalcLeastSquares();
     }
 }
