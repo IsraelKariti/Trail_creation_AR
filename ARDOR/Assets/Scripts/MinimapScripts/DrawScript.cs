@@ -24,11 +24,10 @@ public class DrawScript : MonoBehaviour
                 coordList = new List<Vector2d>();
         } }
 
-    private void CalcPin(Vector3 p)
+    private void CalcPin(Vector3 mousePosScreen)
     {
         string str = "";
-        var mousePosCam = p;
-        var mousePosWorld = cam.ScreenToWorldPoint(mousePosCam);
+        var mousePosWorld = cam.ScreenToWorldPoint(mousePosScreen);
         var diffUnityMeters = (mousePosWorld - map.transform.position);
 
         double lat = map.CenterLatitudeLongitude.x;
@@ -36,8 +35,15 @@ public class DrawScript : MonoBehaviour
         // and than divide again with the number of zoom actions (substruct the number of zoom actions to fit the world map in screen)
         double geoMetersPerTile = 40075016.685578 * Math.Cos(Mathf.Deg2Rad * map.CenterLatitudeLongitude.x) / Math.Pow(2f, 3f)/ Math.Pow(2d, map.AbsoluteZoom-1) ;
         double zoomDecimal = map.Zoom - map.AbsoluteZoom;
-        double tileSizeInPixel = 128.0 + zoomDecimal * 128.0;//original tile size is 128 pixels
-        double tileCountPerTexture = 1024.0 / tileSizeInPixel;// Ex. 1024/128 = 8
+
+        int dim = getDim();// the dimentions of the raw image in pixels
+        double tileSizeInPixelForIntegerZoom = (double)dim / 8.0;
+        double tileSizeInPixel = tileSizeInPixelForIntegerZoom + zoomDecimal * tileSizeInPixelForIntegerZoom;//original tile size is 128 pixels
+        double tileCountPerTexture = dim / tileSizeInPixel;// Ex. 1024/128 = 8
+
+
+        //double tileSizeInPixel = 128.0 + zoomDecimal * 128.0;//original tile size is 128 pixels
+        //double tileCountPerTexture = 1024.0 / tileSizeInPixel;// Ex. 1024/128 = 8
         double geoMetersPerTexture = geoMetersPerTile * tileCountPerTexture;
         double geoMetersPerUnityMeter = geoMetersPerTexture / 200.0; // orthographic camera frustom is 200*200 in unity meters
         Vector2d diffGeoMeters = new Vector2d(diffUnityMeters.x * geoMetersPerUnityMeter, diffUnityMeters.z * geoMetersPerUnityMeter);
@@ -45,7 +51,10 @@ public class DrawScript : MonoBehaviour
         var newLatLong = map.CenterLatitudeLongitude + latlongDelta;
         coordList.Add(newLatLong);
     }
-
+    private int getDim()
+    {
+        return Screen.height > Screen.width ? Screen.height : Screen.width;
+    }
     private Vector2d DiffMetersToLatLon(Vector2d diffGeoMeters, double lat)
     {
         var diffLat = (diffGeoMeters.y / EARTH_CIRCUMFERENCE) * 360;
@@ -68,7 +77,7 @@ public class DrawScript : MonoBehaviour
         if (Input.GetMouseButton(0) && !IsPointerOverUIElement())
         {
             Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            if(mousePos.x<1024 && mousePos.y < 1024)
+            //if(mousePos.x<1024 && mousePos.y < 1024)
             {
                 touchPosList.Add(mousePos);
                 lineRenderer.Points = touchPosList;

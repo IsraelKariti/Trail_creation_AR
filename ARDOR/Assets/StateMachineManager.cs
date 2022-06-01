@@ -8,7 +8,6 @@ public class StateMachineManager : MonoBehaviour
     public GameObject initPanel;
 
     public GameObject map;
-    public GameObject UImap;
     public GameObject toggleDraw;
     public GameObject btn;
     public GameObject lineDrawer;
@@ -17,7 +16,6 @@ public class StateMachineManager : MonoBehaviour
     public void flipMap(bool b)
     {
         map.SetActive(b);
-        UImap.SetActive(b);
         toggleDraw.SetActive(b);
         btn.SetActive(b);
         lineDrawer.SetActive(b);

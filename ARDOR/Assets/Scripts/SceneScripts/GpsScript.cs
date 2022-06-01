@@ -11,6 +11,7 @@ public class GpsScript : MonoBehaviour
 {
     //public Text text;
     public Camera arCam;
+
     private string TAG = "GpsScript";
     private int SKIP_SAMPLES = 10;
     private double prevTimeStamp;
@@ -21,6 +22,15 @@ public class GpsScript : MonoBehaviour
     private int _sampleCountForInitialMapPosition=0;
     private int gpsSampleCounter = 0;
     private bool initMap2D = false;
+    private double inLat;// the input location lat 
+    private double inLon;
+    private float inHorizontalAcc;
+    private double inAlt;
+    private float inAltAcc;
+    private float emuLon = 34f;
+    private bool initiated = false;
+    bool flag = false;
+
     public int sampleCountForInitialMapPosition { get { return _sampleCountForInitialMapPosition; } }
     public float avgLat { get { return _avgLat; } }
     public float avgLon { get { return _avgLon; } }
@@ -36,13 +46,6 @@ public class GpsScript : MonoBehaviour
     public event GpsUpdatedLeastSquaresEventHandler GpsUpdated_CalcLeastSquares;
     public bool gpsOn { set { _gpsOn = value; } }
 
-    private double inLat;// the input location lat 
-    private double inLon;
-    private float inHorizontalAcc;
-    private double inAlt;
-    private float inAltAcc;
-    private float emuLon = 34f;
-    private bool initiated = false; 
 
     private void Awake()
     {
@@ -80,7 +83,17 @@ public class GpsScript : MonoBehaviour
     private void unityGPS()
     {
         File.AppendAllText(Application.persistentDataPath + "/gps.txt", "unityGPS\n");
-
+#if (UNITY_EDITOR)
+        
+        if (!flag)
+        {
+            flag = true;
+            GpsUdated_LoadMap2D(31.262619, 34.793353, 1);
+            GpsUpdated_EnableARButton(31.262619, 34.793353, 1);
+            GpsUpdated_SetARMap(31.262619, 34.793353, 1);
+            GpsUpdated_CalcLeastSquares();
+        }
+#endif
         if (Input.location.status == LocationServiceStatus.Running && Input.location.lastData.timestamp > prevTimeStamp && _gpsOn && Input.location.lastData.horizontalAccuracy < 8.0f)
         {
             inLat = Input.location.lastData.latitude;
@@ -98,12 +111,13 @@ public class GpsScript : MonoBehaviour
                 gpsSampleCounter++;
                 return;
             }
-
+            // skip first 10 unaccurate samples
             if(gpsSampleCounter>0 && gpsSampleCounter <= 10)
             {
                 gpsSampleCounter++;
                 return;
             }
+            // 
             if (gpsSampleCounter == 11)
             {
                 GpsUpdated_EnableARButton(inLat, inLon, inHorizontalAcc);
@@ -111,7 +125,7 @@ public class GpsScript : MonoBehaviour
                 return;
             }
             OnGpsUpdated();
-            
+
             /////////////////////
             //if (_skipSamples > SKIP_SAMPLES)
             //{
