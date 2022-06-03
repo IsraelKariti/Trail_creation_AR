@@ -11,6 +11,7 @@ public class GpsScript : MonoBehaviour
 {
     //public Text text;
     public Camera arCam;
+
     private string TAG = "GpsScript";
     private int SKIP_SAMPLES = 10;
     private double prevTimeStamp;
@@ -21,6 +22,15 @@ public class GpsScript : MonoBehaviour
     private int _sampleCountForInitialMapPosition=0;
     private int gpsSampleCounter = 0;
     private bool initMap2D = false;
+    private double inLat;// the input location lat 
+    private double inLon;
+    private float inHorizontalAcc;
+    private double inAlt;
+    private float inAltAcc;
+    private float emuLon = 34f;
+    private bool initiated = false;
+    bool flag = false;
+
     public int sampleCountForInitialMapPosition { get { return _sampleCountForInitialMapPosition; } }
     public float avgLat { get { return _avgLat; } }
     public float avgLon { get { return _avgLon; } }
@@ -28,20 +38,14 @@ public class GpsScript : MonoBehaviour
     // listener for the map+ground
 
     public delegate void GpsUpdatedSetSampleEventHandler(double lat, double lon, float acc);
-    public event GpsUpdatedSetSampleEventHandler GpsUdated_LoadMap2D;
+    public event GpsUpdatedSetSampleEventHandler GpsUdated_InitialCenterMap2D;
+    public event GpsUpdatedSetSampleEventHandler GpsUpdated_EnableARButton;
     public event GpsUpdatedSetSampleEventHandler GpsInitialized;
     public event GpsUpdatedSetSampleEventHandler GpsUpdated_SetARMap;
     public delegate void GpsUpdatedLeastSquaresEventHandler();
-    public event GpsUpdatedLeastSquaresEventHandler GpsUpdatedCalcLeastSquares;
+    public event GpsUpdatedLeastSquaresEventHandler GpsUpdated_CalcLeastSquares;
     public bool gpsOn { set { _gpsOn = value; } }
 
-    private double inLat;// the input location lat 
-    private double inLon;
-    private float inHorizontalAcc;
-    private double inAlt;
-    private float inAltAcc;
-    private float emuLon = 34f;
-    private bool initiated = false; 
 
     private void Awake()
     {
@@ -76,10 +80,27 @@ public class GpsScript : MonoBehaviour
 
     }
 
+    IEnumerator EmulateGps()
+    {
+        yield return new WaitForSeconds(2);
+
+        GpsUdated_InitialCenterMap2D(31.262619, 34.793353, 1);
+        GpsUpdated_EnableARButton(31.262619, 34.793353, 1);
+        GpsUpdated_SetARMap(31.262619, 34.793353, 1);
+        GpsUpdated_CalcLeastSquares();
+    }
+
     private void unityGPS()
     {
         File.AppendAllText(Application.persistentDataPath + "/gps.txt", "unityGPS\n");
-
+#if (UNITY_EDITOR)
+        
+        if (!flag)
+        {
+            flag = true;
+            StartCoroutine("EmulateGps");
+        }
+#endif
         if (Input.location.status == LocationServiceStatus.Running && Input.location.lastData.timestamp > prevTimeStamp && _gpsOn && Input.location.lastData.horizontalAccuracy < 8.0f)
         {
             inLat = Input.location.lastData.latitude;
@@ -93,19 +114,25 @@ public class GpsScript : MonoBehaviour
 
             if(gpsSampleCounter == 0)
             {
-                GpsUdated_LoadMap2D(inLat, inLon, inHorizontalAcc);
+                GpsUdated_InitialCenterMap2D(inLat, inLon, inHorizontalAcc);
                 gpsSampleCounter++;
                 return;
             }
-
+            // skip first 10 unaccurate samples
             if(gpsSampleCounter>0 && gpsSampleCounter <= 10)
             {
                 gpsSampleCounter++;
                 return;
             }
-
+            // 
+            if (gpsSampleCounter == 11)
+            {
+                GpsUpdated_EnableARButton(inLat, inLon, inHorizontalAcc);
+                gpsSampleCounter++;
+                return;
+            }
             OnGpsUpdated();
-            
+
             /////////////////////
             //if (_skipSamples > SKIP_SAMPLES)
             //{
@@ -130,6 +157,6 @@ public class GpsScript : MonoBehaviour
     public void OnGpsUpdated()
     {
         GpsUpdated_SetARMap(inLat, inLon, inHorizontalAcc);
-        GpsUpdatedCalcLeastSquares();
+        GpsUpdated_CalcLeastSquares();
     }
 }
