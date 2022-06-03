@@ -1962,6 +1962,7 @@ GameObject:
   - component: {fileID: 1590799934}
   - component: {fileID: 1590799933}
   - component: {fileID: 1590799932}
+  - component: {fileID: 1590799935}
   m_Layer: 0
   m_Name: MapboxMap2d
   m_TagString: Untagged
@@ -2131,6 +2132,25 @@ MonoBehaviour:
   _tileProvider: {fileID: 0}
   _previewOptions:
     isPreviewEnabled: 0
+--- !u!114 &1590799935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590799931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf32ea2cc0514b569329f6b6b68f9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _map: {fileID: 1590799934}
+  _locationStrings:
+  - 31.261805, 34.794704
+  _spawnScale: 10
+  _markerPrefab: {fileID: 1839187062704024, guid: 9b5b1b761a8994c07affd0a05396633b,
+    type: 3}
+  gpsScript: {fileID: 734176019}
 --- !u!224 &1590799936
 RectTransform:
   m_ObjectHideFlags: 0

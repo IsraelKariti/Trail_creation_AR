@@ -5,6 +5,7 @@ using Mapbox.Unity.Map;
 using Mapbox.Utils;
 public class StateMachineManager : MonoBehaviour
 {
+
     public AbstractMap abstractMap;
     public GpsScript gpsScript;
     public GameObject initPanel;

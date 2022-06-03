@@ -7,8 +7,9 @@
 	using Mapbox.Unity.Utilities;
 	using System.Collections.Generic;
 
-	public class SpawnOnMap : MonoBehaviour
+	public class SpawnUserLocationIndicationOnMap : MonoBehaviour
 	{
+		
 		[SerializeField]
 		AbstractMap _map;
 
@@ -25,6 +26,8 @@
 
 		List<GameObject> _spawnedObjects;
 
+		public GpsScript gpsScript;
+
 		void Start()
 		{
 			_locations = new Vector2d[_locationStrings.Length];
@@ -38,6 +41,7 @@
 				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 				_spawnedObjects.Add(instance);
 			}
+			gpsScript.GpsUpdated_SetARMap += updateUserLocationIndication;
 		}
 
 		private void Update()
@@ -51,5 +55,11 @@
 				spawnedObject.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 			}
 		}
+
+		public void updateUserLocationIndication(double lat, double lon, float acc)
+        {
+			_locations[0].x = lat;
+			_locations[0].y = lon;
+        }
 	}
 }
