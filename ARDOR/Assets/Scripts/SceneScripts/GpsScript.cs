@@ -38,7 +38,7 @@ public class GpsScript : MonoBehaviour
     // listener for the map+ground
 
     public delegate void GpsUpdatedSetSampleEventHandler(double lat, double lon, float acc);
-    public event GpsUpdatedSetSampleEventHandler GpsUdated_LoadMap2D;
+    public event GpsUpdatedSetSampleEventHandler GpsUdated_InitialCenterMap2D;
     public event GpsUpdatedSetSampleEventHandler GpsUpdated_EnableARButton;
     public event GpsUpdatedSetSampleEventHandler GpsInitialized;
     public event GpsUpdatedSetSampleEventHandler GpsUpdated_SetARMap;
@@ -80,6 +80,16 @@ public class GpsScript : MonoBehaviour
 
     }
 
+    IEnumerator EmulateGps()
+    {
+        yield return new WaitForSeconds(2);
+
+        GpsUdated_InitialCenterMap2D(31.262619, 34.793353, 1);
+        GpsUpdated_EnableARButton(31.262619, 34.793353, 1);
+        GpsUpdated_SetARMap(31.262619, 34.793353, 1);
+        GpsUpdated_CalcLeastSquares();
+    }
+
     private void unityGPS()
     {
         File.AppendAllText(Application.persistentDataPath + "/gps.txt", "unityGPS\n");
@@ -88,10 +98,7 @@ public class GpsScript : MonoBehaviour
         if (!flag)
         {
             flag = true;
-            GpsUdated_LoadMap2D(31.262619, 34.793353, 1);
-            GpsUpdated_EnableARButton(31.262619, 34.793353, 1);
-            GpsUpdated_SetARMap(31.262619, 34.793353, 1);
-            GpsUpdated_CalcLeastSquares();
+            StartCoroutine("EmulateGps");
         }
 #endif
         if (Input.location.status == LocationServiceStatus.Running && Input.location.lastData.timestamp > prevTimeStamp && _gpsOn && Input.location.lastData.horizontalAccuracy < 8.0f)
@@ -107,7 +114,7 @@ public class GpsScript : MonoBehaviour
 
             if(gpsSampleCounter == 0)
             {
-                GpsUdated_LoadMap2D(inLat, inLon, inHorizontalAcc);
+                GpsUdated_InitialCenterMap2D(inLat, inLon, inHorizontalAcc);
                 gpsSampleCounter++;
                 return;
             }
