@@ -17,8 +17,8 @@ public class MapToppingsScript : MonoBehaviour
     public GameObject sightPrefab;
     public Text horizontalIndicationText;
     public Text verticalIndicationText;
-    public GameObject ShowRoadBtn;
-    public GameObject ToggleMap2DBtn;
+   // public GameObject ShowRoadBtn;
+    //public GameObject ToggleMap2DBtn;
     public AbstractMap abstractMap;
      
     private double mapcenterLat;
@@ -36,6 +36,7 @@ public class MapToppingsScript : MonoBehaviour
     private int indexSight = 0;
     private bool activlyRearrangingSights = false;
     private bool isMapToppingsIntialized = false;
+    private String debugStr = "";
 
     public double MapCenterLat { get { return mapcenterLat; } set { mapcenterLat = value; } }
     public double MapCenterLon { get { return mapcenterLon; } set { mapcenterLon = value; } }
@@ -54,6 +55,7 @@ public class MapToppingsScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("koko start");
         gpsScript.GpsUpdated_SetARMap += OnGpsUpdated;
     }
     public void OnGpsUpdated(double lat, double lon, float acc)
@@ -269,14 +271,21 @@ public class MapToppingsScript : MonoBehaviour
     //}
     private void Update()
     {
+        debugStr = "";
+        debugStr += "1";
         // if the topping hasn't been set yet than don't do anything
         if (isMapToppingsIntialized)
         {
+            debugStr += "2";
+
             // at the begining the map doesn't know its height, so we estimate from the 2 closest points,
             // this should be stopped when a collider is hit, cause than the height is known (colliders are at a known height)
             if (!isVerticalLocked)
-                evaluateTemporaryInitialMapHeight();
+            {
+                debugStr += "3";
 
+                evaluateTemporaryInitialMapHeight();
+            }
             // this is called every couple of seconds
             // move each sight on different frame,
             // so that the affects on one sight can be taken into account in the second sight
@@ -295,12 +304,17 @@ public class MapToppingsScript : MonoBehaviour
 
             //}
         }
+        Debug.Log("kuku: "+debugStr);
     }
 
     public void evaluateTemporaryInitialMapHeight()
     {
-        if (gpsScript.sampleCountForInitialMapPosition > 1)
+        debugStr += "4";
+
+        //if (gpsScript.sampleCountForInitialMapPosition > 1)
         {
+            debugStr += "5";
+
             // loop on all pois find 2 closest
             GameObject minGo1 = pois[0];
             float dist1 = 999999;
@@ -333,6 +347,8 @@ public class MapToppingsScript : MonoBehaviour
                 //and that the user is holding the cam at aprx height of 1.1 meters
                 //this variable will theoratically stay almost constant as the ar cam y position goes up the how much to lift goes down
                 float howMuchToLiftTheMapIfPhoneIsHandHeld = arCam.transform.position.y + howMuchToLiftTheMap - 1.1f;
+                debugStr += " lift:"+howMuchToLiftTheMapIfPhoneIsHandHeld;
+
                 transform.position = new Vector3(transform.position.x, howMuchToLiftTheMapIfPhoneIsHandHeld, transform.position.z);
             }
         }

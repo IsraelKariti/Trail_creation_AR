@@ -119,13 +119,13 @@ public class GpsScript : MonoBehaviour
                 return;
             }
             // skip first 10 unaccurate samples
-            if(gpsSampleCounter>0 && gpsSampleCounter <= 10)
+            if(gpsSampleCounter>0 && gpsSampleCounter <= SKIP_SAMPLES)
             {
                 gpsSampleCounter++;
                 return;
             }
             // 
-            if (gpsSampleCounter == 11)
+            if (gpsSampleCounter == SKIP_SAMPLES+1)
             {
                 GpsUpdated_EnableARButton(inLat, inLon, inHorizontalAcc);
                 gpsSampleCounter++;

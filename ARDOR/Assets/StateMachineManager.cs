@@ -7,7 +7,7 @@ using Mapbox.Examples;
 public class StateMachineManager : MonoBehaviour
 {
     public GpsScript gpsScript;
-
+    public SpawnUserLocationIndicationOnMap spawnUserLocationIndication;
     public GameObject panelInitialization;
 
     public GameObject panelMap2DButtons;
@@ -25,7 +25,9 @@ public class StateMachineManager : MonoBehaviour
     void Start()
     {
         gpsScript.GpsUdated_InitialCenterMap2D += OnGpsInit;
+        gpsScript.GpsUdated_InitialCenterMap2D += spawnUserLocationIndication.updateUserLocationIndication;
         gpsScript.GpsUpdated_EnableARButton += OnEnableAR;
+
     }
     public void OnGpsInit(double lat, double lon, float acc)
     {
