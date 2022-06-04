@@ -8,6 +8,7 @@ TagManager:
   - poiConnector
   - turn
   - map2DRawImage
+  - panel
   layers:
   - Default
   - TransparentFX

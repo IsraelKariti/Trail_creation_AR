@@ -66,7 +66,6 @@ public class MapToppingsScript : MonoBehaviour
 
             mapcenterLat = lat;
             mapcenterLon = lon;
-            ToggleMap2DBtn.SetActive(true);
             abstractMap.Options.locationOptions.latitudeLongitude = ""+lat+","+lon;
 
             //createMapToppings();

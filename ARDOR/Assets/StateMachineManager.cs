@@ -3,44 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
+using Mapbox.Examples;
 public class StateMachineManager : MonoBehaviour
 {
-
-    public AbstractMap abstractMap;
     public GpsScript gpsScript;
-    public GameObject initPanel;
 
+    public GameObject panelInitialization;
+
+    public GameObject panelMap2DButtons;
+    public GameObject buttonChangeMapToAR;
     public GameObject map;
-    public GameObject toggleDraw;
-    public GameObject btn;
-    public GameObject lineDrawer;
-    public GameObject toggleSatellite;
-    public GameObject toggleMinimap;
+    public AbstractMap abstractMap;
+    public GameObject map2DCam;
 
-    // Start is called before the first frame update
+    public GameObject panelAR;
+    public QuadTreeCameraMovement quadTreeCameraMovement;
+    public DrawScript drawScript;
+
+
+        // Start is called before the first frame update
     void Start()
     {
         gpsScript.GpsUdated_InitialCenterMap2D += OnGpsInit;
         gpsScript.GpsUpdated_EnableARButton += OnEnableAR;
     }
-
-    public void OnEnableAR(double lat, double lon, float acc)
-    {
-        toggleMinimap.SetActive(true);
-    }
     public void OnGpsInit(double lat, double lon, float acc)
     {
-        initPanel.SetActive(false);
-        flipMap2DButtons(true);
-        abstractMap.UpdateMap(new Vector2d(lat,lon));
+        panelInitialization.SetActive(false);
+        panelMap2DButtons.SetActive(true);
+        abstractMap.UpdateMap(new Vector2d(lat, lon));
     }
-    public void flipMap2DButtons(bool b)
+    
+    public void OnEnableAR(double lat, double lon, float acc)
     {
-
-        toggleDraw.SetActive(b);
-        btn.SetActive(b);
-        lineDrawer.SetActive(b);
-        toggleSatellite.SetActive(b);
-
+        buttonChangeMapToAR.SetActive(true);
     }
+
+    public void enableDrawRedLine(bool b)
+    {
+        quadTreeCameraMovement.MinimapLocked = b;
+        drawScript.MinimapLocked = b;
+    }
+    public void ChangeToAR()
+    {
+        panelMap2DButtons.SetActive(false);
+        map.SetActive(false);
+        map2DCam.SetActive(false);
+        panelAR.SetActive(true);
+    }
+    public void ChangeToMap2D()
+    {
+        panelMap2DButtons.SetActive(true);
+        map.SetActive(true);
+        map2DCam.SetActive(true);
+        panelAR.SetActive(false);
+    }
+
 }

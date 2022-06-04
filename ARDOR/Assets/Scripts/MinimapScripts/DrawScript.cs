@@ -126,7 +126,7 @@ public class DrawScript : MonoBehaviour
         for (int index = 0; index < eventSystemRaysastResults.Count; index++)
         {
             RaycastResult curRaysastResult = eventSystemRaysastResults[index];
-            if (curRaysastResult.gameObject.tag != "map2DRawImage")
+            if (curRaysastResult.gameObject.tag != "map2DRawImage" && curRaysastResult.gameObject.tag != "panel")
                 return true;
         }
         return false;
