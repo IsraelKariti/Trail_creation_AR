@@ -55,7 +55,6 @@ public class MapToppingsScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("koko start");
         gpsScript.GpsUpdated_SetARMap += OnGpsUpdated;
     }
     public void OnGpsUpdated(double lat, double lon, float acc)
@@ -76,12 +75,11 @@ public class MapToppingsScript : MonoBehaviour
             isMapToppingsIntialized = true;
         }
     }
-    public void createMapToppings()
+    public void createMapToppings(string fileName)
     {
-        Debug.Log("createMapToppings YEEPEE!");
         deletePrevPois();
 
-        createPois();
+        createPois(fileName);
 
         // poisitioning the pois can be done only after the map center has been determind (lat lon alt)
         positionPois();
@@ -111,11 +109,14 @@ public class MapToppingsScript : MonoBehaviour
         poiFileLines = new List<string>();
     }
 
-    public void createPois()
+    public void createPois(string fileName)
     {
 
         //1) read all lines from poi file
-        StreamReader reader = new StreamReader(Application.persistentDataPath + "/coords.txt");
+        StreamReader reader = new StreamReader(Application.persistentDataPath + "/"+fileName);
+        if (reader == null)
+            return;
+
         string line;
 
         float minDistFromCenter = 999999999;
@@ -304,7 +305,6 @@ public class MapToppingsScript : MonoBehaviour
 
             //}
         }
-        Debug.Log("kuku: "+debugStr);
     }
 
     public void evaluateTemporaryInitialMapHeight()

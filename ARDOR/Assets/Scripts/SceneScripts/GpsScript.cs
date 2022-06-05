@@ -82,7 +82,7 @@ public class GpsScript : MonoBehaviour
 
     IEnumerator EmulateGps()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         GpsUdated_InitialCenterMap2D(31.262619, 34.793353, 1);
         GpsUpdated_EnableARButton(31.262619, 34.793353, 1);
