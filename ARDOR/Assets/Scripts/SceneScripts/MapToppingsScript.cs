@@ -115,7 +115,7 @@ public class MapToppingsScript : MonoBehaviour
     {
 
         //1) read all lines from poi file
-        StreamReader reader = new StreamReader(Application.persistentDataPath + "/pois.txt");
+        StreamReader reader = new StreamReader(Application.persistentDataPath + "/coords.txt");
         string line;
 
         float minDistFromCenter = 999999999;
@@ -274,7 +274,7 @@ public class MapToppingsScript : MonoBehaviour
         debugStr = "";
         debugStr += "1";
         // if the topping hasn't been set yet than don't do anything
-        if (isMapToppingsIntialized)
+        if (isMapToppingsIntialized && pois.Count > 2)
         {
             debugStr += "2";
 

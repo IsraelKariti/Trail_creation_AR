@@ -103,13 +103,14 @@ public class DrawScript : MonoBehaviour
     public void CreateCoordFile()
     {
         Debug.Log("creat file");
-        File.Delete(Application.persistentDataPath + "/pois.txt");
-        File.AppendAllText(Application.persistentDataPath + "/pois.txt", "lat,lon\n");
+        File.Delete(Application.persistentDataPath + "/coords.txt");
+        File.AppendAllText(Application.persistentDataPath + "/coords.txt", "lat,lon\n");
         foreach(Vector2d v in coordList)
         {
-            File.AppendAllText(Application.persistentDataPath + "/pois.txt", v.x+","+v.y+"\n");
+            File.AppendAllText(Application.persistentDataPath + "/coords.txt", v.x+","+v.y+"\n");
 
         }
+        coordList.Clear();
         coordList = new List<Vector2d>();
     }
 

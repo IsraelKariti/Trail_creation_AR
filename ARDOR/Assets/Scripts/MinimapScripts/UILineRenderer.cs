@@ -20,7 +20,13 @@ public class UILineRenderer : Graphic
             SetVerticesDirty();
             } 
     }
+    public void clearPoints()
+    {
+        points.Clear();
 
+        points = new List<Vector2>();
+        SetVerticesDirty();
+    }
     protected override void OnPopulateMesh(VertexHelper vh)
     {
         Debug.Log("OnPopulateMesh YEEPEE");
