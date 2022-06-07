@@ -17,7 +17,12 @@ public class LoadRoadScript : MonoBehaviour
         FileInfo[] info = dir.GetFiles("coords*.txt");
         foreach (FileInfo f in info)
         {
-            dropdown.options.Add(new TMP_Dropdown.OptionData( f.Name ) );
+            string name = f.Name;
+            int start = name.IndexOf("s");
+            start++;
+            int end = name.IndexOf(".");
+            string trimmedName = name.Substring(start, end - start);
+            dropdown.options.Add(new TMP_Dropdown.OptionData( trimmedName ) );
         }
         dropdown.value = 0;
         dropdown.RefreshShownValue();
